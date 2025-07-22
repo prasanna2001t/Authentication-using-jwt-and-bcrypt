@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const jwt = require('jsonwebtoken')
 const bodyParser = require('body-parser')
@@ -15,7 +16,7 @@ const dbClient = new DynamoDBClient({ region: 'us-east-1' })
 const docClient = DynamoDBDocument.from(dbClient)
 
 const app = express()
-const tableName = "UserTable"
+const tableName = process.env.TABLE
 
 
 
@@ -33,7 +34,7 @@ app.use(session({
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.set('view engine', 'ejs')
-const JWT_SECRET = 'HETH'
+const JWT_SECRET = process.env.SECRET
 
 /////////////////OTP functions//////////////////////////
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
@@ -41,8 +42,8 @@ const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString()
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'prasannabalaji095@gmail.com',       // Your Gmail address
-        pass: 'wvpv svjq yyjh uswl',     // App password, NOT your Gmail password
+        user: process.env.TRANSPORTEREMAIL,       
+        pass: process.env.TRANSPORTERPASS,    
     }
 });
 
